@@ -1,0 +1,107 @@
+{
+    "m_SelectedDeviceId": "ce10171a14cd4817047e",
+    "m_SelectedPackage": {
+        "deviceId": "ce10171a14cd4817047e",
+        "name": "com.JH.BallMan",
+        "processId": 12206,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.sec.android.app.launcher",
+            "processId": 6214,
+            "exited": false
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 32640,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 11492,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 18553,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 19831,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 31287,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.BallMan",
+            "processId": 12206,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "Behavior": 0
+    },
+    "m_Filter": "",
+    "m_FilterIsRegularExpression": false,
+    "m_SymbolPaths": []
+}
