@@ -6,7 +6,10 @@ using Photon.Realtime;
 
 public class PlayerSound : MonoBehaviourPunCallbacks
 {
-    private AudioSource myAudio;
+    [SerializeField]
+    private AudioSource mouseAudio;
+    [SerializeField]
+    private AudioSource stoneAudio;
 
     public AudioClip[] jumpClips;
     public AudioClip[] dashClips;
@@ -15,19 +18,15 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     public AudioClip[] sadClips;
     public AudioClip[] deathClips;
 
-    private void Awake()
-    {
-        myAudio = GetComponent<AudioSource>();
-    }
-
     private void Start()
     {
-        myAudio.volume = UserData.instance.EffectVolume;
+        mouseAudio.volume = UserData.instance.EffectVolume;
+        stoneAudio.volume = UserData.instance.EffectVolume;
     }
 
     public void JumpSound()
     {
-        if (myAudio.isPlaying) return;
+        if (mouseAudio.isPlaying) return;
 
         int i = Random.Range(0, jumpClips.Length);
         photonView.RPC("RPCJumpSound", RpcTarget.All, i);
@@ -35,10 +34,10 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCJumpSound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = jumpClips[i];
-        myAudio.Play();
+        mouseAudio.clip = jumpClips[i];
+        mouseAudio.Play();
     }
 
     public void DashSound()
@@ -49,10 +48,10 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCDashSound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = dashClips[i];
-        myAudio.Play();
+        mouseAudio.clip = dashClips[i];
+        mouseAudio.Play();
     }
 
     public void HitSound()
@@ -63,10 +62,10 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCHitSound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = hitClips[i];
-        myAudio.Play();
+        mouseAudio.clip = hitClips[i];
+        mouseAudio.Play();
     }
 
     public void HappySound()
@@ -77,10 +76,10 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCHappySound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = happyClips[i];
-        myAudio.Play();
+        mouseAudio.clip = happyClips[i];
+        mouseAudio.Play();
     }
 
     public void SadSound()
@@ -91,10 +90,10 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCSadSound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = sadClips[i];
-        myAudio.Play();
+        mouseAudio.clip = sadClips[i];
+        mouseAudio.Play();
     }
 
     public void DeathSound()
@@ -105,9 +104,9 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCDeathSound(int i)
     {
-        myAudio.Stop();
+        mouseAudio.Stop();
 
-        myAudio.clip = deathClips[i];
-        myAudio.Play();
+        mouseAudio.clip = deathClips[i];
+        mouseAudio.Play();
     }
 }

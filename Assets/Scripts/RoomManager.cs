@@ -77,7 +77,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
         int ran = Random.Range(0, 2);
         ran = ran == 0 ? -1 : 1;
 
-        Vector3 pos = new Vector3(ran * 5, 2, 0);
+        Vector3 pos = new Vector3(ran * 6f, 1.5f, -3);
 
         GameObject clone = PhotonNetwork.Instantiate("PlayerInRoom", Vector3.zero, Quaternion.identity);
         clone.transform.Find("Ball").transform.position = pos;

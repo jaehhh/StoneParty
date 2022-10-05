@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Map_Forest
   m_EditorClassIdentifier: 
   mapName: Forest
-  mapSprite: {fileID: 21300000, guid: dfd3ed9fb82422740a5f5abb1d1638a5, type: 3}
+  mapSprite: {fileID: 21300000, guid: 75176a38111bb2d40bd0417db5966632, type: 3}
   maxPlayerInTeamMod: 0400000002000000
   maxPlayerInPersonalMod: 

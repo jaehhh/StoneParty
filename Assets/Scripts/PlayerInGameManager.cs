@@ -25,13 +25,13 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private Material[] mats;
+    [SerializeField]
+    private Color[] colors;
 
     // UserData UserData.instance;
 
     public void Awake()
     {
-        //UserData.instance = Resources.Load("Table/UserData") as UserData;
-
         Setup();
     }
 
@@ -44,7 +44,8 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
         mainGameManager.gameStateChangeEvent.AddListener(MovePossibleState);
 
         string name = PhotonNetwork.NickName;
-        photonView.RPC("PlayerSetup", RpcTarget.AllBuffered, name);
+        int colorIndex = (string)PhotonNetwork.LocalPlayer.CustomProperties["teamColor"] == "blue" ? 0 : 1;
+        photonView.RPC("PlayerSetup", RpcTarget.AllBuffered, name, colorIndex);
 
         // 포톤.커스텀프로퍼티 초기화
         PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "isReady", false } });
@@ -66,13 +67,15 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
             this.transform.Find("Ball").tag = "PlayerOrange";
         }
         
+
     }
 
     // 플레이어 네임태그
     [PunRPC]
-    private void PlayerSetup(string name)
+    private void PlayerSetup(string name, int color)
     {
         playerNameTagText.text = name;
+        playerNameTagText.color = colors[color];
     }
 
     // RPC 머테리얼 변경

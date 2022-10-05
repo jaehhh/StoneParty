@@ -25,9 +25,12 @@ public class MoveController : MonoBehaviourPunCallbacks
 
     // 점프
     private float maxJumpForce = 10; // 최대 점프 높이
-    private float jumpForceAcceleration = 20; // 유지 초당 점프량
-    private float currentJumpForce; // 누적된 점프량
-    private float minJumpForce = 1.5f; // 최소 점프량
+    private float minJumpForce = 3f; // 최소 점프량
+    private float jumpMaxDelayTime = 0.08f; // 점프 선입력 유효시간
+    private float jumpCurrentDelayTime; // 점프 입력 후 경과된 시간
+    private float jumpButtonMaxTime = 0.15f; // 버튼 최대 입력 시간
+    private float jumpButtonMinTime = 0.05f; // 버튼 최소 입력 시간
+    private float jumpButtonCurrentTime; // 버튼 누름 경과된 시간
 
     // 대쉬
     private float dashForce = 5; // 대쉬량
@@ -35,7 +38,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     private float dashCurrentCooldown; // 쿨타임 대기시간
     private Image dashButtonCooldownImage; // 대쉬버튼 쿨다운 이미지
 
-    private bool canJump = false;// 점프 가능성 유무 체크
+    public bool canJump = false;// 점프 가능성 유무 체크
     private float needGroundedTime = 0.05f;// 점프 가능 조건에 필요한 땅 안착 유지 시간
     private float currentGroundedTime; // 땅 안착을 유지한 시간
 
@@ -44,7 +47,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     [SerializeField]
     private KeyCode dashKey = KeyCode.D;
 
-    // 모바일 조작 상태 체크 값
+    // 조작 상태 체크 값
     private bool isJumpButtonDown = false;
     private int moveDirection = 0; // 왼쪽 -1, 정지 0, 오른쪽 1
 
@@ -59,34 +62,38 @@ public class MoveController : MonoBehaviourPunCallbacks
 
         if (testing)
         {
+            canMove = true;
+
             Debug.LogWarning("맵 테스트중. 포톤뷰이즈마인 비화성화중");
         }
         else
         {
             if (!photonView.IsMine) return;
+
+
+            // 모바일
+            uiManagerInMainGame = FindObjectOfType<UIManagerInMainGame>().GetComponent<UIManagerInMainGame>();
+            uiManagerInMainGame.jumpButtonDownEvent.AddListener(JumpButtonDownMobileSwitch);
+            uiManagerInMainGame.jumpButtonUpEvent.AddListener(JumpButtonUpMobile);
+            uiManagerInMainGame.dashButtonEvent.AddListener(Dash);
+            uiManagerInMainGame.moveButtonEvent.AddListener(MovementMobileSwitch);
+
+            // 공통
+
+            dashButtonCooldownImage = GameObject.Find("DashButtonCooldownImage").GetComponent<Image>();
         }
-
-        // 모바일
-        uiManagerInMainGame = FindObjectOfType<UIManagerInMainGame>().GetComponent<UIManagerInMainGame>();
-        uiManagerInMainGame.jumpButtonDownEvent.AddListener(JumpButtonDownMobileSwitch);
-        uiManagerInMainGame.jumpButtonUpEvent.AddListener(JumpButtonUpMobile);
-        uiManagerInMainGame.dashButtonEvent.AddListener(Dash);
-        uiManagerInMainGame.moveButtonEvent.AddListener(MovementMobileSwitch);
-
-        // 공통
-        
-        dashButtonCooldownImage = GameObject.Find("DashButtonCooldownImage").GetComponent<Image>();
     }
 
     private void Update()
     {
+        /*
         // 속도에 따라 질량 변화
         float velX = rigid.velocity.x;
         if (velX <= 0)
         {
             velX *= -1;
         }
-        rigid.mass = Mathf.Clamp(velX, 1f, 5f);
+        rigid.mass = Mathf.Clamp(velX, 1f, 5f);*/
 
         if (!photonView.IsMine) return;
 
@@ -152,29 +159,27 @@ public class MoveController : MonoBehaviourPunCallbacks
 
     private void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            // 점프키를 누른 시간에 따라 점프힘이 정해짐
-            currentJumpForce += jumpForceAcceleration * Time.deltaTime;
+            isJumpButtonDown = true;
+        }
+        else if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if (isJumpButtonDown == false) return;
+
+        // 점프키를 누른 시간
+        jumpButtonCurrentTime += Time.deltaTime;
+
+            if (jumpButtonCurrentTime >= jumpButtonMaxTime)
+            {
+                Jumping();
+            }
         }
         else if(Input.GetKeyUp(KeyCode.Space))
         {
-            if (canJump == false)
-            {
-                currentJumpForce = 0;
-                return;
-            }
+            if (isJumpButtonDown == false) return;
 
-            playerSound.JumpSound();
-
-            currentJumpForce += minJumpForce; // 최소 점프량
-            currentJumpForce = Mathf.Clamp(currentJumpForce, minJumpForce, maxJumpForce);
-
-            rigid.velocity += new Vector3(0, currentJumpForce, 0);
-  
-            canJump = false;
-            currentGroundedTime = 0;
-            currentJumpForce = 0;
+            Jumping();
         }
     }
 
@@ -219,7 +224,40 @@ public class MoveController : MonoBehaviourPunCallbacks
     {
         if(isJumpButtonDown)
         {
-            currentJumpForce += jumpForceAcceleration * Time.deltaTime;
+            // 점프키를 누른 시간
+            jumpButtonCurrentTime += Time.deltaTime;
+
+            // 점프키 입력 중지 혹은 오래 눌렀을 때 점프
+            if(jumpButtonCurrentTime >= jumpButtonMaxTime)
+            {
+                Jumping();
+            }
+        }
+    }
+
+    private void Jumping()
+    {
+        StopCoroutine(DelayJump());
+
+        if (canJump == false)
+        {
+            StartCoroutine(DelayJump());
+        }
+        else
+        {
+            playerSound.JumpSound();
+
+            float percent = jumpButtonCurrentTime / jumpButtonMaxTime;
+            percent = Mathf.Clamp(percent, 0f, 1f);
+            float force = Mathf.Clamp(maxJumpForce * percent, minJumpForce, maxJumpForce);
+
+            rigid.velocity += new Vector3(0, force, 0);
+
+            canJump = false;
+            currentGroundedTime = 0;
+
+            jumpButtonCurrentTime = 0;
+            isJumpButtonDown = false;
         }
     }
 
@@ -232,32 +270,51 @@ public class MoveController : MonoBehaviourPunCallbacks
     // 이벤트로 등록해놓고 버튼을 땠을 때 점프하는 메소드
     public void JumpButtonUpMobile()
     {
-        if (!canMove) return;
+        if (isJumpButtonDown == false) return;
 
         isJumpButtonDown = false;
 
-        if (canJump == false)
-        {
-            currentJumpForce = 0;
-            return;
-        }
-
-        playerSound.JumpSound();
-
-        currentJumpForce += minJumpForce; // 최소 점프량
-        currentJumpForce = Mathf.Clamp(currentJumpForce, minJumpForce, maxJumpForce);
-
-        rigid.velocity += new Vector3(0, currentJumpForce, 0);
-
-        canJump = false;
-        currentGroundedTime = 0;
-        currentJumpForce = 0; 
+        Jumping();
     }
 
     #endregion
 
     #region PC + Mobile Control
 
+    // 선입력 점프
+    private IEnumerator DelayJump()
+    {
+        jumpCurrentDelayTime = 0;
+        float temp = jumpButtonCurrentTime;
+
+        jumpButtonCurrentTime = 0;
+        isJumpButtonDown = false;
+
+        while (jumpCurrentDelayTime < jumpMaxDelayTime)
+        {
+            if (canJump)
+            {
+                // 점프하기
+
+                playerSound.JumpSound();
+
+                float percent = jumpButtonCurrentTime / jumpButtonMaxTime;
+                percent = Mathf.Clamp(percent, 0f, 1f);
+                float force = Mathf.Clamp(maxJumpForce * percent, minJumpForce, maxJumpForce);
+
+                rigid.velocity += new Vector3(0, force, 0);
+
+                canJump = false;
+                currentGroundedTime = 0;
+
+                break;
+            }
+
+            jumpCurrentDelayTime += Time.deltaTime;
+
+            yield return null;
+        }
+    }
 
     // 좌우 이동속도 감속
     private void Deceleration()
@@ -350,12 +407,12 @@ public class MoveController : MonoBehaviourPunCallbacks
 
             StartCoroutine("Respawn");
         }
-        else if(collision.transform.CompareTag("Player"))
+        else if(collision.transform.CompareTag("PlayerOrange") || collision.transform.CompareTag("PlayerBlue"))
         {
             float vel = collision.gameObject.GetComponent<Rigidbody>().velocity.x;
-            if (vel < 0) vel *= -1; 
+            if (vel < 0) vel *= -1;
 
-            if (vel > 2f)
+            if (vel > 5f)
             playerSound.HitSound();
         }
     }
