@@ -24,6 +24,8 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
     private TextMeshProUGUI playerNameTagText;
 
     [SerializeField]
+    private MeshRenderer oreMesh;
+    [SerializeField]
     private Material[] mats;
     [SerializeField]
     private Color[] colors;
@@ -91,7 +93,7 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
             this.transform.Find("Ball").tag = "PlayerOrange";
         }
 
-        this.GetComponentInChildren<MeshRenderer>().material = mats[matNum];
+        oreMesh.material = mats[matNum];
     }
 
     // MoveController로부터 호출되는 하위 오브젝트 "Ball"의 Renderer 끄고 키기

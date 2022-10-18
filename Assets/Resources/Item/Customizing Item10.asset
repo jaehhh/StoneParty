@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43a36ae5ab95ce147bb721538ae06692, type: 3}
+  m_Name: Customizing Item10
+  m_EditorClassIdentifier: 
+  itemCode: 10
+  itemName: Soda Can
+  object3D: {fileID: 526996057637102313, guid: bb19668dcdafaaf44aaa8b25f7965fe0, type: 3}
+  image2D: {fileID: 21300000, guid: 5bb06a3de236a8941ae86c863fa1405b, type: 3}

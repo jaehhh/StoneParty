@@ -42,7 +42,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     private float needGroundedTime = 0.05f;// 점프 가능 조건에 필요한 땅 안착 유지 시간
     private float currentGroundedTime; // 땅 안착을 유지한 시간
 
-    private float respawnTime = 1;
+    private float respawnTime = 2.3f; // 리스폰 타임
 
     [SerializeField]
     private KeyCode dashKey = KeyCode.D;

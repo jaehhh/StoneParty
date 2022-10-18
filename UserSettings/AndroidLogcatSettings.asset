@@ -11,12 +11,6 @@
         {
             "deviceId": "ce10171a14cd4817047e",
             "name": "com.JH.BallMan",
-            "processId": 11492,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
             "processId": 18553,
             "exited": true
         },
@@ -42,6 +36,12 @@
             "deviceId": "ce10171a14cd4817047e",
             "name": "com.JH.BallMan",
             "processId": 7088,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.sec.android.app.launcher",
+            "processId": 5496,
             "exited": false
         }
     ],

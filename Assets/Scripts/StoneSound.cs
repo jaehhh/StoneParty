@@ -98,6 +98,11 @@ public class StoneSound : MonoBehaviour
         }
         // 속도 일정 이하면 돌굴러가는 소리 중단
         else
-            myAudio.Pause();
+        {
+            if (myAudio.isPlaying)
+            {
+                myAudio.Pause();
+            }
+        }
     }
 }

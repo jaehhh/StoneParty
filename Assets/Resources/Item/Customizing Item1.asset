@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Customizing Item1
   m_EditorClassIdentifier: 
   itemCode: 1
-  itemName: ConeHat
-  object3D: {fileID: 5566040988425034720, guid: 8e490142ae528d04eb42ce7a5c4117b7, type: 3}
-  image2D: {fileID: 21300000, guid: 027586538d69cdf4284aad6d0558786e, type: 3}
+  itemName: Bell Pepper
+  object3D: {fileID: 1704974784973007869, guid: 563a640e5eddc7740b964f1764f625e5, type: 3}
+  image2D: {fileID: 21300000, guid: 982e348189d0b1944a876b585080c946, type: 3}

@@ -20,6 +20,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     [SerializeField]
     private GameObject readyUI;
 
+    [SerializeField]
+    private MeshRenderer oreMesh;
     public Material[] mats;
 
     [HideInInspector]
@@ -186,7 +188,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         yield return new WaitForSeconds(0.07f);
 
-        this.GetComponentInChildren<MeshRenderer>().material = mats[matNum];
+        oreMesh.material = mats[matNum];
     }
 
     public void EquipItem(int itemCode = 0)

@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Customizing Item2
   m_EditorClassIdentifier: 
   itemCode: 2
-  itemName: Test_Name1
-  object3D: {fileID: 5945923104536896736, guid: 0af547100b71d2e41a810b8b6f3e2211, type: 3}
-  image2D: {fileID: 21300000, guid: 2d2e402403a35a64faad9157ac7f79e2, type: 3}
+  itemName: Cookie
+  object3D: {fileID: 3212705340339357888, guid: 998b18780e1527c4cba35c5f60c2070d, type: 3}
+  image2D: {fileID: 21300000, guid: 5073ca5e0cdef794db1669cbbd271d7c, type: 3}
