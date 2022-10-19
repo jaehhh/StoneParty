@@ -4,7 +4,7 @@
 QualitySettings:
   m_ObjectHideFlags: 0
   serializedVersion: 5
-  m_CurrentQuality: 3
+  m_CurrentQuality: 5
   m_QualitySettings:
   - serializedVersion: 2
     name: Very Low
@@ -190,13 +190,13 @@ QualitySettings:
     name: Ultra
     pixelLightCount: 4
     shadows: 2
-    shadowResolution: 2
+    shadowResolution: 3
     shadowProjection: 1
     shadowCascades: 4
-    shadowDistance: 15
-    shadowNearPlaneOffset: 3
+    shadowDistance: 80
+    shadowNearPlaneOffset: 4
     shadowCascade2Split: 0.33333334
-    shadowCascade4Split: {x: 0.06666667, y: 0.2, z: 0.46666667}
+    shadowCascade4Split: {x: 0.044640254, y: 0.15447876, z: 0.42848727}
     shadowmaskMode: 1
     skinWeights: 255
     textureQuality: 0
@@ -216,8 +216,8 @@ QualitySettings:
     streamingMipmapsMaxLevelReduction: 2
     streamingMipmapsMaxFileIORequests: 1024
     particleRaycastBudget: 4096
-    asyncUploadTimeSlice: 2
-    asyncUploadBufferSize: 16
+    asyncUploadTimeSlice: 4
+    asyncUploadBufferSize: 32
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
     customRenderPipeline: {fileID: 0}
