@@ -51,20 +51,18 @@ public class MoveController : MonoBehaviourPunCallbacks
     private bool isJumpButtonDown = false;
     private int moveDirection = 0; // 왼쪽 -1, 정지 0, 오른쪽 1
 
-    // 테스트
+    // 대기방/메인게임
     [SerializeField]
-    private bool testing = false;
+    private bool isRoom = false;
 
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
         playerSound = GetComponentInParent<PlayerSound>();
 
-        if (testing)
+        if (isRoom)
         {
-            canMove = true;
 
-            Debug.LogWarning("맵 테스트중. 포톤뷰이즈마인 비화성화중");
         }
         else
         {
@@ -96,6 +94,7 @@ public class MoveController : MonoBehaviourPunCallbacks
         rigid.mass = Mathf.Clamp(velX, 1f, 5f);*/
 
         if (!photonView.IsMine) return;
+        if (isRoom) return;
 
         if (canMove && canMoveForRespawn)
         {

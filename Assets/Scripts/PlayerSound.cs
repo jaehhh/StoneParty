@@ -20,7 +20,7 @@ public class PlayerSound : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        mouseAudio.volume = UserData.instance.EffectVolume;
+        mouseAudio.volume = UserData.instance.EffectVolume * 0.55f;
         stoneAudio.volume = UserData.instance.EffectVolume;
     }
 

@@ -10,24 +10,33 @@ public class SliderController : MonoBehaviour
 
     private void Start()
     {
-        AudioSource audioSoruce = null;
+        UserData user = UserData.instance;
+        if (user == null) return;
+
         Slider slider = GetComponent<Slider>();
+
+        
 
         if (sliderName.ToLower().Contains("effectsound"))
         {
-            SoundController.Instance.effectAudio.TryGetComponent<AudioSource>(out audioSoruce);
+            //SoundController.Instance.effectAudio.TryGetComponent<AudioSource>(out audioSoruce);
             slider.onValueChanged.AddListener((str) => SoundController.Instance.EffectAudioSetting(slider));
+
+            slider.value = user.EffectVolume;
         }
         else if (sliderName.ToLower().Contains("bgmsound"))
         {
-            SoundController.Instance.BGMAudio.TryGetComponent<AudioSource>(out audioSoruce);
+            //SoundController.Instance.BGMAudio.TryGetComponent<AudioSource>(out audioSoruce);
             slider.onValueChanged.AddListener((str) => SoundController.Instance.BGMAudioSetting(slider));
+
+            slider.value = user.BGMVolume;
         }
 
+        /*
         // 저장된 플레이어 옵션설정값에 따라 슬라이더 밸류값 셋업
         if (audioSoruce != null)
         {
              this.GetComponent<Slider>().value = audioSoruce.volume;
-        } 
+        }*/
     }
 }

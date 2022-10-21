@@ -55,20 +55,22 @@ public class SoundController : MonoBehaviour
             //UserData.instance = Resources.Load("Table/UserData") as UserData;
 
             effectAudio.volume = UserData.instance.EffectVolume;
-            BGMAudio.volume = UserData.instance.BGMVolume; 
+            BGMAudio.volume = UserData.instance.BGMVolume * 0.75f;
         }
     }
 
     public void EffectAudioSetting(Slider slider)
     {
-        effectAudio.volume = slider.value;
-        UserData.instance.EffectVolume = effectAudio.volume;
+        float value = slider.value;
+        effectAudio.volume = value;
+        UserData.instance.EffectVolume = value;
     }
 
     public void BGMAudioSetting(Slider slider)
     {
-        BGMAudio.volume = slider.value;
-        UserData.instance.BGMVolume = BGMAudio.volume;
+        float value = slider.value;
+        BGMAudio.volume = value *0.75f;
+        UserData.instance.BGMVolume = value;
     }
 
     public void EffectSoundOn(string str = "")

@@ -30,7 +30,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     private TextMeshProUGUI alertMasage;
 
     // 설정 값
-    private float maxTime = 6000;
+    private float maxTime = 180;
     float currentTime;
 
     // 타 스크립트에서 받는 값

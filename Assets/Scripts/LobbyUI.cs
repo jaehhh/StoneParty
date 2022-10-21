@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 using System.Text;
 using UnityEngine.UI;
 
-// 아직 기능적으로 사용하지 않음
-public enum UIName { profile = 0, name, level, home, customize, library, setting, exit, roomFind, length};
-
 public class LobbyUI : MonoBehaviour
 {
     [Header("Other Objects for Get Component")]
@@ -30,6 +27,11 @@ public class LobbyUI : MonoBehaviour
     private GameObject currentPopupUIObject;
 
     private List<GameObject> UIObjectList = new List<GameObject>();
+
+    // 화면 하단에 있는 버튼
+    [SerializeField]
+    private Button[] bottomButtons;
+    private int currentButtonIndex;
 
 
     // ==================================== SWIPE ====================================================
@@ -60,6 +62,8 @@ public class LobbyUI : MonoBehaviour
     private void Awake()
     {
         scrollBar.value = 0.5f; // 빠른 중앙 조정
+        currentButtonIndex = 1;
+        bottomButtons[currentButtonIndex].GetComponent<SpriteChanger>().Selected();
 
         UIObjectList.Add(homeUIObject);
         UIObjectList.Add(roomFindUIObject);
@@ -221,6 +225,10 @@ public class LobbyUI : MonoBehaviour
 
     private IEnumerator OnSwipeOneStep(int index)
     {
+        bottomButtons[currentButtonIndex].GetComponent<SpriteChanger>().Deselected();
+        bottomButtons[index].GetComponent<SpriteChanger>().Selected();
+        currentButtonIndex = index;
+
         float start = scrollBar.value;
         float current = 0;
         float percent = 0;

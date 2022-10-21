@@ -28,8 +28,8 @@ MonoBehaviour:
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
-  PunLogging: 2
+  DevRegion: kr
+  PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
   StartInOfflineMode: 0
@@ -38,43 +38,34 @@ MonoBehaviour:
   - DestroyRpc
   - DestroySpaceship
   - Fire
-  - RespawnSpaceship
-  - ChangeImage
-  - ReceiveChat
-  - RoomSetup
-  - PRCChattingBoxDisappear
-  - RPCChattingBoxOn
-  - RPCChattingBoxDisappear
   - PlayerSetup
-  - RPCReady
-  - RPCChangeTeam
-  - RPCMaterialChange
-  - SaveMat
-  - RPCSetMat
+  - ReceiveChat
+  - RespawnSpaceship
+  - RoomSetup
   - RPCChangeMat
-  - StageStart
-  - Timer
-  - RPCOccupationCoroutine
-  - OccupationDecrease
-  - OccupationIncrease
-  - RPCStageStart
-  - RPCTimer
-  - RPCSliderSetActive
-  - RPCOccupationCooldownCoroutine
-  - RPCMoveCoroutine
-  - RPCSliderValueSet
-  - RPCRendererSetActive
-  - RPCOccupationSuccess
-  - RPCFlagColorChange
+  - RPCChattingBoxDisappear
+  - RPCChattingBoxOn
   - RPCCreateParticleDeath
-  - RPCEquipItem
-  - SoundPlay
   - RPCDashSound
   - RPCDeathSound
+  - RPCEquipItem
+  - RPCFlagColorChange
   - RPCHappySound
   - RPCHitSound
   - RPCJumpSound
+  - RPCMaterialChange
+  - RPCMoveCoroutine
+  - RPCOccupationCooldownCoroutine
+  - RPCOccupationCoroutine
+  - RPCOccupationSuccess
+  - RPCReady
+  - RPCRendererSetActive
   - RPCSadSound
+  - RPCSetMat
+  - RPCSliderSetActive
+  - RPCSliderValueSet
+  - RPCStageStart
+  - RPCTimer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

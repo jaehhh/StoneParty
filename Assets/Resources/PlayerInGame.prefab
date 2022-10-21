@@ -166,7 +166,7 @@ MonoBehaviour:
   canMove: 0
   canJump: 0
   dashKey: 100
-  testing: 0
+  isRoom: 0
 --- !u!82 &8905222434601438705
 AudioSource:
   m_ObjectHideFlags: 0
