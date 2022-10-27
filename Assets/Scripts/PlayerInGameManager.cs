@@ -11,26 +11,26 @@ using Photon.Realtime;
 
 public class PlayerInGameManager : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    private GameObject[] particleDeath;
-
+    // 타 오브젝트의 컴포넌트 참조
+    [HideInInspector]
+    public ParticleManager particleManager;
     private MainGameManager mainGameManager;
     public MainGameManager MainGameManager
     {
         get { return mainGameManager; }
     }
 
+    // 내 오브젝트 컴포넌트 참조
     [SerializeField]
     private TextMeshProUGUI playerNameTagText;
 
+    // 수치값 내 오브젝트에 메모리로 보유
     [SerializeField]
     private MeshRenderer oreMesh;
     [SerializeField]
     private Material[] mats;
     [SerializeField]
     private Color[] colors;
-
-    // UserData UserData.instance;
 
     public void Awake()
     {
@@ -43,6 +43,7 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
 
         // 메인게임매니져의 이벤트함수에 플레이어자신의 움직임가능상태전환 메소드를 등록
         mainGameManager = GameObject.FindObjectOfType<MainGameManager>().GetComponent<MainGameManager>();
+        particleManager = mainGameManager.GetComponent<ParticleManager>();
         mainGameManager.gameStateChangeEvent.AddListener(MovePossibleState);
 
         string name = PhotonNetwork.NickName;
@@ -119,28 +120,23 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
         gameObject.GetComponentInChildren<MoveController>().canMove = value;
     }
 
-    // 자식 오브젝트 "Ball"에서 사망처리 되었을 때 부모의 PhotonView를 이용하여 PhotonNetwork.Instantiate()사용
-    public void CreateParticleDeath(Vector3 pos)
+    // 자식 오브젝트 "Ball"에서 사망처리 되었을 때 해당 메소드가 불리고 메소드에서 RPC호출한다음 RPC에서 ParticleManager호출
+    public void CreateDeathParticle(Vector3 pos)
     {
-
-        int num;
-
         if ((string)PhotonNetwork.LocalPlayer.CustomProperties["teamColor"] == "blue")
         {
-            num = 0;
+            photonView.RPC("RPCCreateDeathParticle", RpcTarget.AllBufferedViaServer, 0, pos);
         }
         else
         {
-            num = 1;
+            photonView.RPC("RPCCreateDeathParticle", RpcTarget.AllBufferedViaServer, 1, pos);
         }
-
-        photonView.RPC("RPCCreateParticleDeath", RpcTarget.AllBufferedViaServer, pos, num);
     }
 
     [PunRPC]
-    private void RPCCreateParticleDeath(Vector3 pos, int num)
+    private void RPCCreateDeathParticle(int num, Vector3 pos)
     {
-        Instantiate(particleDeath[num], pos, Quaternion.identity);
+        particleManager.ActiveDeathParticle(num, pos);
     }
 
     public void EquipItem(int itemCode = 0)

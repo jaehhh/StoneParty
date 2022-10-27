@@ -14,6 +14,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     // 내 컴포넌트
     private Rigidbody rigid;
     private PlayerSound playerSound;
+    private PlayerInGameManager myManager;
 
     public bool canMove; // 게임의 시작과 종료로부터 여부를 체크
     private bool canMoveForRespawn = true; // 죽고 리스폰했을 때 여부를 체크
@@ -22,6 +23,8 @@ public class MoveController : MonoBehaviourPunCallbacks
     private float maxSpeed = 5; // 최대 속도
     private float acceleration = 10; // 초당 속도 증가량
     private float deceleration = 2f; // 초당 속도 감소량
+    [HideInInspector]
+    public float fixedVel; // 충돌처리 하기 전에 가지고 있던 속도
 
     // 점프
     private float maxJumpForce = 10; // 최대 점프 높이
@@ -59,6 +62,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     {
         rigid = GetComponent<Rigidbody>();
         playerSound = GetComponentInParent<PlayerSound>();
+        myManager = GetComponentInParent<PlayerInGameManager>();
 
         if (isRoom)
         {
@@ -79,6 +83,7 @@ public class MoveController : MonoBehaviourPunCallbacks
             // 공통
 
             dashButtonCooldownImage = GameObject.Find("DashButtonCooldownImage").GetComponent<Image>();
+            dashCurrentCooldown = dashCooldown;
         }
     }
 
@@ -155,6 +160,14 @@ public class MoveController : MonoBehaviourPunCallbacks
         }
     }
 
+    private void FixedUpdate()
+    {
+        fixedVel = rigid.velocity.x;
+        if(fixedVel < 0)
+        {
+            fixedVel *= -1f;
+        }
+    }
 
     private void Jump()
     {
@@ -402,17 +415,35 @@ public class MoveController : MonoBehaviourPunCallbacks
             canMoveForRespawn = false;
             GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-            GetComponentInParent<PlayerInGameManager>().CreateParticleDeath(transform.position);
+            GetComponentInParent<PlayerInGameManager>().CreateDeathParticle(transform.position);
 
             StartCoroutine("Respawn");
         }
         else if(collision.transform.CompareTag("PlayerOrange") || collision.transform.CompareTag("PlayerBlue"))
         {
-            float vel = collision.gameObject.GetComponent<Rigidbody>().velocity.x;
-            if (vel < 0) vel *= -1;
+            float otherVel = collision.transform.GetComponent<MoveController>().fixedVel;
+            float myVel = fixedVel;
 
-            if (vel > 5f)
-            playerSound.HitSound();
+            // 상대가 빠르게 굴러오면
+            if (otherVel > 3.5f)
+            {
+                playerSound.HitSound();
+
+                // 부딪힌 플레이어와 나의 중앙 포지션 값
+                Vector3 dis = transform.position - collision.transform.position;
+                Vector3 pos = transform.position - dis / 2f;
+
+                myManager.particleManager.ActiveBumpParticle(pos);
+            } 
+            // 내가 빠르게 굴러가면
+            else if (myVel >= 3.5f)
+            {
+                // 부딪힌 플레이어와 나의 중앙 포지션 값
+                Vector3 dis = transform.position - collision.transform.position;
+                Vector3 pos = transform.position - dis / 2f;
+
+                myManager.particleManager.ActiveBumpParticle(pos);
+            }
         }
     }
 

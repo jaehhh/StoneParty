@@ -492,6 +492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiManagerInMainGame: {fileID: 0}
   canMove: 0
+  fixedVel: 0
   canJump: 0
   dashKey: 100
   isRoom: 1
