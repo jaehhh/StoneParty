@@ -41,6 +41,6 @@ public class WidthHeightSetting : MonoBehaviour
             ch = cw;
         }
 
-        gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(cw, ch);
+        gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(cw * 1.1f, ch * 1.1f);
     }
 }
