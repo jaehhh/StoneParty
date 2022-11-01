@@ -12,7 +12,8 @@ public class StoneSound : MonoBehaviour
 
     private AudioSource myAudio;
     private Rigidbody myRigid;
-    private MoveController moveController;
+    private PlayerInGameManager myManager;
+    private PlayerManager myManagerRoom;
 
     private float userDataVolume;
     private float maxPitch = 0.8f;
@@ -20,11 +21,21 @@ public class StoneSound : MonoBehaviour
 
     private bool isJumping = false;
 
+    [SerializeField]
+    private bool isRoom;
+
     private void Start()
     {
         myAudio = GetComponent<AudioSource>();
         myRigid = GetComponentInParent<Rigidbody>();
-        moveController = GetComponentInParent<MoveController>();
+        if(isRoom == false)
+        {
+            myManager = GetComponentInParent<PlayerInGameManager>();
+        }
+        else
+        {
+            myManagerRoom = GetComponentInParent<PlayerManager>();
+        }
 
         clipIndex = Random.Range(0, rollingClips.Length);
         myAudio.clip = rollingClips[clipIndex];
@@ -55,19 +66,35 @@ public class StoneSound : MonoBehaviour
             velX = Mathf.Clamp(velX, minPitch, maxPitch);
             myAudio.pitch = velX;
 
-            if (moveController.canJump == false)
+            // 점프하면 소리 중단
+            if (isRoom == false)
             {
-                myAudio.Pause();
+                if (myManager.canJump == false)
+                {
+                    myAudio.Pause();
 
-                isJumping = true;
+                    isJumping = true;
 
-                return;
+                    return;
+                }
             }
+            else
+            {
+                if (myManagerRoom.canJump == false)
+                {
+                    myAudio.Pause();
+
+                    isJumping = true;
+
+                    return;
+                }
+            }
+            
 
             // 재생 중지상태거나 재생 완료
             if (myAudio.isPlaying == false)
             {
-                // 클립 변경
+                // 클립 변경 : 점프
                 if (isJumping)
                 {
                     int i  = Random.Range(0, jumpDownClips.Length);
@@ -76,6 +103,7 @@ public class StoneSound : MonoBehaviour
 
                     isJumping = false;
                 }
+                // 클립 변경 : 구르기
                 else
                 {             
                     while (true)

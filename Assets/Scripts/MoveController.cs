@@ -15,6 +15,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     private Rigidbody rigid;
     private PlayerSound playerSound;
     private PlayerInGameManager myManager;
+    private PlayerManager myManagerRoom;
 
     public bool canMove; // 게임의 시작과 종료로부터 여부를 체크
     private bool canMoveForRespawn = true; // 죽고 리스폰했을 때 여부를 체크
@@ -58,6 +59,11 @@ public class MoveController : MonoBehaviourPunCallbacks
     [SerializeField]
     private bool isRoom = false;
 
+    [SerializeField]
+    private bool isTesting = false;
+    [SerializeField]
+    private bool testReverseMove = false;
+
     private void Awake()
     {
         rigid = GetComponent<Rigidbody>();
@@ -66,12 +72,12 @@ public class MoveController : MonoBehaviourPunCallbacks
 
         if (isRoom)
         {
-
+            myManagerRoom = GetComponentInParent<PlayerManager>();
         }
         else
         {
             if (!photonView.IsMine) return;
-
+            if (isTesting) return;
 
             // 모바일
             uiManagerInMainGame = FindObjectOfType<UIManagerInMainGame>().GetComponent<UIManagerInMainGame>();
@@ -134,6 +140,7 @@ public class MoveController : MonoBehaviourPunCallbacks
 
     #region PC Control
 
+    // PC 좌우이동 키보드 조작
     private void Movement()
     {
         // 방향키 누르면 가속량만큼 좌우 이동 
@@ -142,7 +149,10 @@ public class MoveController : MonoBehaviourPunCallbacks
             // 일정 속도를 넘어가지 않음
             if (rigid.velocity.x > -maxSpeed)
             {
-                rigid.velocity += Vector3.left * acceleration * Time.deltaTime;
+                if(testReverseMove)
+                    rigid.velocity += Vector3.right * acceleration * Time.deltaTime / 2f;
+                else
+                    rigid.velocity += Vector3.left * acceleration * Time.deltaTime;
             }
         }
         else if (Input.GetKey(KeyCode.RightArrow) && Input.GetKey(KeyCode.LeftArrow) == false)
@@ -150,7 +160,10 @@ public class MoveController : MonoBehaviourPunCallbacks
             // 일정 속도를 넘어가지 않음
             if (rigid.velocity.x < maxSpeed)
             {
-                rigid.velocity += Vector3.right * acceleration * Time.deltaTime;
+                if (testReverseMove)
+                    rigid.velocity += Vector3.left * acceleration * Time.deltaTime / 2f;
+                else
+                    rigid.velocity += Vector3.right * acceleration * Time.deltaTime;
             }
         }
         // 방향키 누르지 않으면 감속량만큼 좌우 이동량 감소
@@ -169,6 +182,7 @@ public class MoveController : MonoBehaviourPunCallbacks
         }
     }
 
+    // PC 점프 키보드 조작
     private void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space))
@@ -199,7 +213,8 @@ public class MoveController : MonoBehaviourPunCallbacks
 
     #region Moblie Control
 
-    // 현 스크립트에서 Update()로 계속 돌림
+    // Update()
+    // 모바일 좌우 이동
     private void MovementMobile()
     {
         if (moveDirection == -1) // 좌측 이동
@@ -231,7 +246,8 @@ public class MoveController : MonoBehaviourPunCallbacks
         moveDirection = value;
     }
 
-    // 현 스크립트에서 Update()로 계속 돌리는 메소드
+    // Update()에 있음
+    // 모바일 점프 버튼 누름
     private void JumpButtonDownMobile()
     {
         if(isJumpButtonDown)
@@ -247,6 +263,7 @@ public class MoveController : MonoBehaviourPunCallbacks
         }
     }
 
+    // 점프 실제 동작 메소드
     private void Jumping()
     {
         StopCoroutine(DelayJump());
@@ -266,12 +283,15 @@ public class MoveController : MonoBehaviourPunCallbacks
             rigid.velocity += new Vector3(0, force, 0);
 
             canJump = false;
+            myManager.CanJumpChange(false);
             currentGroundedTime = 0;
 
             jumpButtonCurrentTime = 0;
             isJumpButtonDown = false;
         }
     }
+
+
 
     // 이벤트로 등록해놓고 버튼을 눌렀을 때 bool값 변경하는 메소드
     public void JumpButtonDownMobileSwitch(bool value)
@@ -317,6 +337,7 @@ public class MoveController : MonoBehaviourPunCallbacks
                 rigid.velocity += new Vector3(0, force, 0);
 
                 canJump = false;
+                myManager.CanJumpChange(false);
                 currentGroundedTime = 0;
 
                 break;
@@ -460,7 +481,16 @@ public class MoveController : MonoBehaviourPunCallbacks
             // 일정 시간동안 땅에 닿아있어야 점프 가능
             if(currentGroundedTime >= needGroundedTime)
             {
-                canJump = true;
+                if(isRoom)
+                {
+                    canJump = true;
+                    myManagerRoom.CanJumpChange(true);
+                }
+                else
+                {
+                    canJump = true;
+                    myManager.CanJumpChange(true);
+                }
             }
         }
     }
@@ -471,7 +501,16 @@ public class MoveController : MonoBehaviourPunCallbacks
 
         if (collision.transform.CompareTag("Ground"))
         {
-            canJump = false;
+            if (isRoom)
+            {
+                canJump = false;
+                myManagerRoom.CanJumpChange(false);
+            }
+            else
+            {
+                canJump = false;
+                myManager.CanJumpChange(false);
+            }
         }
     }
 }

@@ -12,6 +12,8 @@ public class TitleController : MonoBehaviour
     [SerializeField]
     private GameObject newPlayerPanel;
     [SerializeField]
+    private GameObject introToon;
+    [SerializeField]
     private GameObject againPlayerPanel;
 
     private UserDataController dataController;
@@ -27,12 +29,14 @@ public class TitleController : MonoBehaviour
         if (UserData.instance.PlayerName == "new player" || string.IsNullOrEmpty(UserData.instance.PlayerName))
         {
             newPlayerPanel.SetActive(true);
+            introToon.SetActive(true);
             againPlayerPanel.SetActive(false);
         }
         else
         {
             againPlayerPanel.SetActive(true);
             newPlayerPanel.SetActive(false);
+            introToon.SetActive(false);
         }
     }
 

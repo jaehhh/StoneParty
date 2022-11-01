@@ -96,7 +96,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3066294576913337413}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 06f6bd10291af3043b500b138cff4ef7, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -168,6 +168,7 @@ MonoBehaviour:
   canJump: 0
   dashKey: 100
   isRoom: 0
+  isTesting: 0
 --- !u!82 &8905222434601438705
 AudioSource:
   m_ObjectHideFlags: 0
@@ -189,9 +190,9 @@ AudioSource:
   Priority: 129
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 10
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -344,6 +345,8 @@ MonoBehaviour:
   colors:
   - {r: 0.14509805, g: 0.4862745, b: 0.99215686, a: 1}
   - {r: 1, g: 0.5294118, b: 0, a: 1}
+  canJump: 0
+  isTesting: 0
 --- !u!114 &3294827824169505305
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -702,9 +705,9 @@ AudioSource:
   Priority: 130
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -800,6 +803,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a01b03df369ca9d4a99cdd0eb3fd2a15, type: 3}
   - {fileID: 8300000, guid: ebfcaff262c15224c9e7a695ac3be603, type: 3}
   - {fileID: 8300000, guid: 9396c2e8a166d71429e8c34b87e13831, type: 3}
+  isRoom: 0
 --- !u!1 &6460052161150220738
 GameObject:
   m_ObjectHideFlags: 0

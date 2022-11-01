@@ -29,7 +29,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private float disappearTime = 5;
 
-    // UserData UserData.instance;
+    // MoveController에는 PhotonView가 없기 때문에 부모 오브젝트(현 스크립트)에서 관리중
+    [HideInInspector]
+    public bool canJump = false;
 
     private void Awake()
     {
@@ -218,5 +220,17 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         CustomizingItem customizingItem = Resources.Load(itemPath) as CustomizingItem;
 
         Instantiate(customizingItem.object3D, this.gameObject.transform.Find("Ball"));
+    }
+
+
+    public void CanJumpChange(bool value)
+    {
+        photonView.RPC("RPCCanJumpChange", RpcTarget.All, value);
+    }
+
+    [PunRPC]
+    private void RPCCanJumpChange(bool value)
+    {
+        canJump = value;
     }
 }

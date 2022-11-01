@@ -20,8 +20,16 @@ public class PlayerSound : MonoBehaviourPunCallbacks
 
     private void Start()
     {
-        mouseAudio.volume = UserData.instance.EffectVolume * 0.55f;
-        stoneAudio.volume = UserData.instance.EffectVolume;
+        if(UserData.instance != null)
+        {
+            mouseAudio.volume = UserData.instance.EffectVolume * 0.55f;
+            stoneAudio.volume = UserData.instance.EffectVolume;
+        }
+        else
+        {
+            mouseAudio.volume = 0.55f;
+            stoneAudio.volume = 1f;
+        }
     }
 
     public void JumpSound()
@@ -57,7 +65,7 @@ public class PlayerSound : MonoBehaviourPunCallbacks
     public void HitSound()
     {
         int i = Random.Range(0, hitClips.Length);
-        photonView.RPC("RPCHitSound", RpcTarget.All, i);
+        RPCHitSound(i);
     }
     [PunRPC]
     private void RPCHitSound(int i)

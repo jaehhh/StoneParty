@@ -14651,6 +14651,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d84d20bfd9dfc4d4aa6ae6c692e4545f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deactiveTime: 5
   clips:
   - {fileID: 8300000, guid: ade2fbbca4dccad4ca7fcf27186da62d, type: 3}
   - {fileID: 8300000, guid: 0ed98805f0fc7714da042bc9110805d3, type: 3}
@@ -14675,9 +14676,9 @@ AudioSource:
   Priority: 125
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
