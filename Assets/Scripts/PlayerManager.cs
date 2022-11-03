@@ -71,34 +71,36 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     private void TeamSetting()
     {
+        int blueCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["blueTeamCount"];
+        int orangeCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["orangeTeamCount"];
+
         // 첫 입장에만 세팅. 게임을 끝내고 돌아오면 세팅하지 않음
         if (PhotonNetwork.LocalPlayer.CustomProperties["teamColor"] == null)
         {
-            int blueCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["blueTeamCount"];
-            int orangeCount = (int)PhotonNetwork.CurrentRoom.CustomProperties["orangeTeamCount"];
-
             if (blueCount - orangeCount <= 0)
             {
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "teamColor", "blue" } });
+                
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "blueTeamCount", blueCount + 1 } });
-
                 photonView.RPC("RPCChangeMat", RpcTarget.AllBuffered, 0);
             }
             else
             {  
                 PhotonNetwork.LocalPlayer.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "teamColor", "orange" } });
+                
                 PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "orangeTeamCount", orangeCount + 1 } });
-
                 photonView.RPC("RPCChangeMat", RpcTarget.AllBuffered, 1);
             }
         }
         // 게임 끝나고 재입장시 호출
         else if((string)PhotonNetwork.LocalPlayer.CustomProperties["teamColor"] == "blue")
         {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "blueTeamCount", blueCount + 1 } });
             photonView.RPC("RPCChangeMat", RpcTarget.AllBuffered, 0);
         }
         else if((string)PhotonNetwork.LocalPlayer.CustomProperties["teamColor"] == "orange")
         {
+            PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "orangeTeamCount", orangeCount + 1 } });
             photonView.RPC("RPCChangeMat", RpcTarget.AllBuffered, 1);
         }
     }

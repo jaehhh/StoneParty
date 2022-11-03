@@ -188,7 +188,7 @@ public class CreateRoomPanel : MonoBehaviourPunCallbacks
 
         roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable {
             { "RoomName", roomName },{"blueTeamCount",0 },{"orangeTeamCount",0 },
-            {"ModName", selectedMod.modName }, {"MapName",selectedMap.mapName} };
+            {"ModName", selectedMod.modName }, {"MapName",selectedMap.mapName}, {"BGMIndex" , -1} };
 
         // 비번 입력 유무에 따라 방 잠금 설정
         if (string.IsNullOrEmpty(password))

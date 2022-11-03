@@ -280,6 +280,7 @@ public class MoveController : MonoBehaviourPunCallbacks
             percent = Mathf.Clamp(percent, 0f, 1f);
             float force = Mathf.Clamp(maxJumpForce * percent, minJumpForce, maxJumpForce);
 
+            rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z); // 경사 y힘 초기화
             rigid.velocity += new Vector3(0, force, 0);
 
             canJump = false;
@@ -334,6 +335,7 @@ public class MoveController : MonoBehaviourPunCallbacks
                 percent = Mathf.Clamp(percent, 0f, 1f);
                 float force = Mathf.Clamp(maxJumpForce * percent, minJumpForce, maxJumpForce);
 
+                rigid.velocity = new Vector3(rigid.velocity.x, 0, rigid.velocity.z); // 경사 y힘 초기화
                 rigid.velocity += new Vector3(0, force, 0);
 
                 canJump = false;
@@ -429,7 +431,7 @@ public class MoveController : MonoBehaviourPunCallbacks
     {
         if (!photonView.IsMine) return;
 
-        if (collision.transform.CompareTag("DeadGround"))
+        if (collision.transform.CompareTag("DeadGround") && canMoveForRespawn)
         {
             playerSound.DeathSound();
 

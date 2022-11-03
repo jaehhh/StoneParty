@@ -80,7 +80,7 @@ public class ShowCustomizingItem : MonoBehaviour
             clone.transform.localScale = Vector3.one;
 
             // 버튼에 이미지 적용
-            clone.GetComponent<Image>().sprite = customizingItems[i].image2D;
+            clone.transform.GetChild(0).GetComponent<Image>().sprite = customizingItems[i].image2D;
 
             // 버튼에 기능 적용
             int index = i;

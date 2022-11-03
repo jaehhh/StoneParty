@@ -2807,6 +2807,7 @@ MonoBehaviour:
   BGMAudio: {fileID: 8827118423833906188}
   clickEffectClip: {fileID: 8300000, guid: 49d7e9f7226e3d344be4f2a4a6f6ba86, type: 3}
   switchEffectClip: {fileID: 8300000, guid: 3c2ffb2059e5fdf43bfb574dcb569c06, type: 3}
+  introBGMClip: {fileID: 8300000, guid: 94fa4c8ad2f526e41bd5de30724d4eef, type: 3}
   lobbyBGMClips:
   - {fileID: 8300000, guid: b047309c7787fe54e93725b93c4968eb, type: 3}
   battleBGMClips:

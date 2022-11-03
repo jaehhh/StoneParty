@@ -30,7 +30,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     private TextMeshProUGUI alertMasage;
 
     // 설정 값
-    private float maxTime = 180;
+    private float maxTime = 270;
     float currentTime;
 
     // 타 스크립트에서 받는 값
@@ -54,6 +54,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsVisible = false;
         }
         gameStateChangeEvent.AddListener(StageState);
+
+        timeText.text = ((int)maxTime / 60) + " : " + ((int)(maxTime % 60)).ToString("D2");
     }
 
     private void Start()
@@ -174,7 +176,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         {
             currentTime += Time.deltaTime;
 
-            timeText.text = (maxTime - currentTime).ToString("N1");
+            int remainTime = (int)(maxTime - currentTime);
+
+            timeText.text = ((remainTime)/60) + " : " + (remainTime%60).ToString("D2");
 
             if(maxTime - currentTime <= 0)
             {
@@ -238,13 +242,13 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         // 내가 이긴 팀
         if (winner == (string)PhotonNetwork.LocalPlayer.CustomProperties["teamColor"])
         {
-            int exp = Mathf.Min((int)(50 + (int)(currentTime / 10) * 10), 100);
+            int exp = Mathf.Min((int)(30 + (int)(currentTime / 10) * 5), 100);
             UserData.instance.Exp += exp;
         }
         // 내가 진 팀
         else
         {
-            int exp = Mathf.Min((int)(30 + (int)(currentTime / 10) * 6), 60);
+            int exp = Mathf.Min((int)(20 + (int)(currentTime / 10) * 3), 60);
             UserData.instance.Exp += exp;
         }
 
@@ -277,6 +281,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
 
     private void SceneChange()
     {
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "blueTeamCount", 0 } });
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable() { { "orangeTeamCount", 0 } });
+
         SceneManager.LoadScene("Room");
     }
 
@@ -285,9 +292,14 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     {
         Debug.LogWarning("다른 플레이어 떠남");
 
-        gameStateChangeEvent.Invoke(false);
+        // 나 혼자 남으면 게임 종료
+        if(PhotonNetwork.CurrentRoom.PlayerCount <= 1)
+        {
+            gameStateChangeEvent.Invoke(false);
+        }    
     }
 
+    // 방 나가기
     public void ExitRoom()
     {
         PhotonNetwork.OpRemoveCompleteCache();
