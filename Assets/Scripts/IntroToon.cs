@@ -7,6 +7,14 @@ public class IntroToon : MonoBehaviour
     private Sprite[] sprites;
     private int index = 1;
 
+    private AudioSource myAudio;
+    private float volume = -1f;
+
+    private void Awake()
+    {
+        myAudio = GetComponent<AudioSource>();
+    }
+
     private void Update()
     {
 #if UNITY_EDITOR
@@ -31,6 +39,19 @@ public class IntroToon : MonoBehaviour
 
     private void ImageChange()
     {
+        if(volume < 0)
+        {
+            if (UserData.instance != null)
+                volume = UserData.instance.EffectVolume;
+            else
+                volume = 0.5f;
+
+            myAudio.volume = volume;
+        }
+
+        myAudio.Stop();
+        myAudio.Play();
+
         if (index == sprites.Length)
         {
             transform.parent.gameObject.SetActive(false);

@@ -169,6 +169,7 @@ MonoBehaviour:
   dashKey: 100
   isRoom: 0
   isTesting: 0
+  testReverseMove: 0
 --- !u!82 &8905222434601438705
 AudioSource:
   m_ObjectHideFlags: 0
@@ -189,10 +190,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 129
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 10
+  MinDistance: 10
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -225,7 +226,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -704,10 +705,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 130
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 15
+  MinDistance: 10
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -740,7 +741,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

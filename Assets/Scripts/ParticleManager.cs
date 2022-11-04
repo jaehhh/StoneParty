@@ -7,17 +7,20 @@ public class ParticleManager : MonoBehaviour
     // 프리팹
     [SerializeField] GameObject[] particleDeath;
     [SerializeField] GameObject particleBump;
+    [SerializeField] GameObject particleOccupy;
 
     // 메모리
     private MemoryPool memoryPoolDeathParticleBlue;
     private MemoryPool memoryPoolDeathParticleOrange;
     private MemoryPool memoryPoolBumpParticle;
+    private MemoryPool memoryPoolOccupyParticle;
 
     private void Awake()
     {
         memoryPoolDeathParticleBlue = new MemoryPool(particleDeath[0]);
         memoryPoolDeathParticleOrange = new MemoryPool(particleDeath[1]);
         memoryPoolBumpParticle = new MemoryPool(particleBump);
+        memoryPoolOccupyParticle = new MemoryPool(particleOccupy);
     }
 
     public void ActiveDeathParticle(int num, Vector3 pos)
@@ -47,5 +50,14 @@ public class ParticleManager : MonoBehaviour
         clone = memoryPoolBumpParticle.ActivePoolItem();
         clone.transform.position = pos;
         clone.GetComponent<ParticleController>().Setup(memoryPoolBumpParticle);
+    }
+
+    public void ActiveOccupyParticle(Vector3 pos)
+    {
+        GameObject clone;
+
+        clone = memoryPoolOccupyParticle.ActivePoolItem();
+        clone.transform.position = pos;
+        clone.GetComponent<ParticleController>().Setup(memoryPoolOccupyParticle);
     }
 }

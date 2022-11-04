@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MainGameUI
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings: []
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: b0fa7dda746fab94d8610a2e6426fc43, type: 3}
+    - {fileID: 2800000, guid: 8b7b7155465795d46af6b49255788903, type: 3}
+    - {fileID: 2800000, guid: 28de65899a3ed40408f0b923d82e180e, type: 3}
+    - {fileID: 2800000, guid: 3d24a56363d192f438dbc6eda2fb5c75, type: 3}
+    - {fileID: 2800000, guid: 70e800a45db90e340b9403ab6d518742, type: 3}
+    - {fileID: 2800000, guid: 6a98289c3c49bc142a59a4e4c986d8c7, type: 3}
+    - {fileID: 2800000, guid: c61af67edc98c5e46bcc958e1eda5575, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 3d24a56363d192f438dbc6eda2fb5c75, type: 3}
+  - {fileID: 21300000, guid: 70e800a45db90e340b9403ab6d518742, type: 3}
+  - {fileID: 21300000, guid: 8b7b7155465795d46af6b49255788903, type: 3}
+  - {fileID: 21300000, guid: 28de65899a3ed40408f0b923d82e180e, type: 3}
+  - {fileID: 21300000, guid: b0fa7dda746fab94d8610a2e6426fc43, type: 3}
+  - {fileID: 21300000, guid: 6a98289c3c49bc142a59a4e4c986d8c7, type: 3}
+  - {fileID: 21300000, guid: c61af67edc98c5e46bcc958e1eda5575, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - ingame_right
+  - ingame_left
+  - gage01
+  - ingame_jump
+  - gage03
+  - ingame_dash
+  - gui_04_icon_13
+  m_RenderDataMap: {}
+  m_Tag: MainGameUI
+  m_IsVariant: 0

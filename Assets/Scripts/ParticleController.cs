@@ -16,6 +16,8 @@ public class ParticleController : MonoBehaviour
     [SerializeField]
     private AudioClip[] clips;
     private float volume;
+    [SerializeField]
+    private float volumeMultiply = 1f;
 
     public void Setup(MemoryPool memoryPool)
     {
@@ -31,7 +33,7 @@ public class ParticleController : MonoBehaviour
             particles = GetComponentsInChildren<ParticleSystem>();
 
             audioSource = GetComponent<AudioSource>();
-            volume = UserData.instance.EffectVolume;
+            volume = UserData.instance.EffectVolume * volumeMultiply;
         } 
 
         for (int i = 0; i < particles.Length; ++i)

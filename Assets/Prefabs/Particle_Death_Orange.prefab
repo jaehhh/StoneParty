@@ -14655,6 +14655,7 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: ade2fbbca4dccad4ca7fcf27186da62d, type: 3}
   - {fileID: 8300000, guid: 0ed98805f0fc7714da042bc9110805d3, type: 3}
+  volumeMultiply: 1
 --- !u!82 &917725592
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14675,10 +14676,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 125
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 15
+  MinDistance: 10
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -14711,7 +14712,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

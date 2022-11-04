@@ -178,7 +178,7 @@ public class LobbyUI : MonoBehaviour
             {
                 startTouchX = touch.position.x;
             }    
-            else if(touch.phase == TouchPhase.Ended)
+            else if(touch.phase == TouchPhase.Ended && canSwipe)
             {
                 endTouchX = touch.position.x;
 
@@ -327,5 +327,14 @@ public class LobbyUI : MonoBehaviour
         currentIndex = pageNum;
 
         StartCoroutine(OnSwipeOneStep(currentIndex));
+    }
+
+    public void QuitApp()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

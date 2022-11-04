@@ -208,9 +208,12 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         slider.value = value;
     }
 
+    // 점령 성공
     [PunRPC]
     private void RPCOccupationSuccess(string color)
     {
+        manager.GetComponent<ParticleManager>().ActiveOccupyParticle(this.transform.position + new Vector3(0, 2.7f, 0));
+
         manager.OccupationSuccess(color);   
     }
 

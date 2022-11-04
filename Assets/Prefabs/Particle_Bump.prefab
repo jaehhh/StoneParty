@@ -53,10 +53,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 124
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 15
+  MinDistance: 10
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 0
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -89,7 +89,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -147,6 +147,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ba6a5e21d69c5804385acfec25c6ce5a, type: 3}
   - {fileID: 8300000, guid: 382af587545fa7e42aadc869f31ea507, type: 3}
   - {fileID: 8300000, guid: 1f0f81d00c0d8c54ea7075582623cd00, type: 3}
+  volumeMultiply: 1
 --- !u!1 &8843362481482745760
 GameObject:
   m_ObjectHideFlags: 0

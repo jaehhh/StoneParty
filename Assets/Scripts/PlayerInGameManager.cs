@@ -143,6 +143,11 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCCreateDeathParticle(int num, Vector3 pos)
     {
+        if(mainGameManager == null)
+        mainGameManager = GameObject.FindObjectOfType<MainGameManager>().GetComponent<MainGameManager>();
+        if(particleManager == null)
+        particleManager = mainGameManager.GetComponent<ParticleManager>();
+
         particleManager.ActiveDeathParticle(num, pos);
     }
 

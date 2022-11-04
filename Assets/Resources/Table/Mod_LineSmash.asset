@@ -15,5 +15,4 @@ MonoBehaviour:
   modName: LineSmash
   canUseMapsInTeamMod:
   - {fileID: 11400000, guid: f78adfa11eea78943bf0ab68b2212231, type: 2}
-  - {fileID: 11400000, guid: 7f4258a94ca6d654c869fcec8b4d76ac, type: 2}
   canUseMapInPersonalMod: []
