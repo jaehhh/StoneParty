@@ -92,6 +92,11 @@ public class LobbyNetwork : MonoBehaviourPunCallbacks
     // 내정보창에서 방찾기 버튼 누르면 호출
     public void FindRoom()
     {
+        if(PhotonNetwork.IsConnected == false)
+        {
+            Connect();
+        }
+
         Debug.LogWarning("로비 입장 버튼");
 
         Application.runInBackground = true;

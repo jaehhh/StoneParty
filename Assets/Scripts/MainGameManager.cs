@@ -45,6 +45,8 @@ public class MainGameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        Debug.LogWarning("MainGameManager Awake(). 메인게임 씬 프레임 테스트");
+
         Application.runInBackground = true;
 
         // 로비 방목록에서 방 닫기 및 안보이기
@@ -58,10 +60,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         timeText.text = ((int)maxTime / 60) + " : " + ((int)(maxTime % 60)).ToString("D2");
     }
 
-    private void Start()
+    // 화면 전환
+    private void ScreenRotate()
     {
-        // 화면 전환
-
         Screen.orientation = ScreenOrientation.LandscapeLeft; // 왼쪽가로모드로 변경
 
         Screen.orientation = ScreenOrientation.AutoRotation; // 회전 허용
@@ -69,6 +70,13 @@ public class MainGameManager : MonoBehaviourPunCallbacks
         Screen.autorotateToPortraitUpsideDown = false;
         Screen.autorotateToLandscapeLeft = true;
         Screen.autorotateToLandscapeRight = true;
+    }
+
+    private void Start()
+    {
+        Debug.LogWarning("MainGameManager Start(). 메인게임 씬 프레임 테스트");
+
+        ScreenRotate();
 
         CreatePlayer();
 
@@ -129,6 +137,9 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCStageStart()
     {
+        // 화면 전환 안되는 버그 때문에 한 번 더 호출
+        ScreenRotate();
+
         StartCoroutine("StageStart");
     }
 

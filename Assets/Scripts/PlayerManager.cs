@@ -227,7 +227,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
     public void CanJumpChange(bool value)
     {
-        photonView.RPC("RPCCanJumpChange", RpcTarget.All, value);
+        RPCCanJumpChange(true);
+        photonView.RPC("RPCCanJumpChange", RpcTarget.OthersBuffered, value);
     }
 
     [PunRPC]

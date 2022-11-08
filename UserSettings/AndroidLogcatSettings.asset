@@ -1,47 +1,53 @@
 {
     "m_SelectedDeviceId": "ce10171a14cd4817047e",
     "m_SelectedPackage": {
-        "deviceId": "ce10171a14cd4817047e",
-        "name": "com.JH.BallMan",
-        "processId": 7088,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
-            "processId": 18553,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
-            "processId": 19831,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
-            "processId": 31287,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
-            "processId": 12206,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
-            "name": "com.JH.BallMan",
-            "processId": 7088,
-            "exited": true
-        },
-        {
-            "deviceId": "ce10171a14cd4817047e",
             "name": "com.sec.android.app.launcher",
             "processId": 5496,
+            "exited": false
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 17881,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 19969,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 460,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 8438,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 9956,
+            "exited": true
+        },
+        {
+            "deviceId": "ce10171a14cd4817047e",
+            "name": "com.JH.StoneParty",
+            "processId": 11038,
             "exited": false
         }
     ],

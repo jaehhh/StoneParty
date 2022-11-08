@@ -182,12 +182,35 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
 
     public void CanJumpChange(bool value)
     {
-        photonView.RPC("RPCCanJumpChange", RpcTarget.All, value);
+        Debug.LogWarning("내 CanJumpChange()");
+        string name = PhotonNetwork.LocalPlayer.NickName;
+
+        RPCCanJumpChange(value, name);
+
+        photonView.RPC("RPCCanJumpChange", RpcTarget.OthersBuffered, value, name);
     }
 
     [PunRPC]
-    private void RPCCanJumpChange(bool value)
+    private void RPCCanJumpChange(bool value, string name)
     {
+        Debug.LogWarning($"RPCCanJumpChange(). 해당 메소드의 주인 : {name}");
+
         canJump = value;
+    }
+
+    public void Bump(Vector3 pos)
+    {
+        photonView.RPC("RPCBump", RpcTarget.All,pos); ;
+    }
+
+    [PunRPC]
+    private void RPCBump(Vector3 pos)
+    {
+        if (mainGameManager == null)
+            mainGameManager = GameObject.FindObjectOfType<MainGameManager>().GetComponent<MainGameManager>();
+        if (particleManager == null)
+            particleManager = mainGameManager.GetComponent<ParticleManager>();
+
+        particleManager.ActiveBumpParticle(pos);
     }
 }

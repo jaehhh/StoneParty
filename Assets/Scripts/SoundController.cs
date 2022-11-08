@@ -143,7 +143,9 @@ public class SoundController : MonoBehaviourPunCallbacks
         }
         else if(sceneName.ToLower().Contains("linesmash"))
         {
-            if(PhotonNetwork.IsMasterClient)
+            Debug.LogWarning("SoundController 커스텀프로퍼티 메인브금 인덱스 설정 및 참고 시작");
+
+            if (PhotonNetwork.IsMasterClient)
             {
                 int index = Random.Range(0, battleBGMClips.Length);
 
@@ -153,17 +155,7 @@ public class SoundController : MonoBehaviourPunCallbacks
             }
             else
             {
-                while (true)
-                {
-                    int temp = (int)PhotonNetwork.CurrentRoom.CustomProperties["BGMIndex"];
-
-                    if(temp != -1)
-                    {
-                        MainGameBGM(temp);
-
-                        break;
-                    }
-                }
+                BGMFind();
             }
         }
         else
@@ -171,6 +163,22 @@ public class SoundController : MonoBehaviourPunCallbacks
             Debug.LogWarning("어떤한 씬의 이름도 적출되지 않았음");
         }
         previousSceneName = SceneManager.GetActiveScene().name;
+    }
+
+    private void BGMFind()
+    {
+        int temp = (int)PhotonNetwork.CurrentRoom.CustomProperties["BGMIndex"];
+
+        if (temp == -1)
+        {
+            Debug.Log("커스텀프로퍼티 브금 인덱스 검출 실패. 사유 : 방장이 방 커스텀프로퍼티 세팅 늦게 함");
+
+            Invoke("BGMFind", 0.5f);
+        }
+        else
+        {
+            MainGameBGM(temp);
+        }  
     }
 
     private void MainGameBGM(int index)

@@ -447,25 +447,23 @@ public class MoveController : MonoBehaviourPunCallbacks
             float otherVel = collision.transform.GetComponent<MoveController>().fixedVel;
             float myVel = fixedVel;
 
+            // 내가 빠르게 굴러가면
+            if (myVel >= 3.5f)
+            {
+                // 부딪힌 플레이어와 나의 중앙 포지션 값
+                Vector3 dis = transform.position - collision.transform.position;
+                Vector3 pos = transform.position - dis / 2f;
+
+                myManager.Bump(pos);
+            }
             // 상대가 빠르게 굴러오면
-            if (otherVel > 3.5f)
+            else if (otherVel > 3.5f)
             {
                 playerSound.HitSound();
 
                 // 부딪힌 플레이어와 나의 중앙 포지션 값
                 Vector3 dis = transform.position - collision.transform.position;
                 Vector3 pos = transform.position - dis / 2f;
-
-                myManager.particleManager.ActiveBumpParticle(pos);
-            } 
-            // 내가 빠르게 굴러가면
-            else if (myVel >= 3.5f)
-            {
-                // 부딪힌 플레이어와 나의 중앙 포지션 값
-                Vector3 dis = transform.position - collision.transform.position;
-                Vector3 pos = transform.position - dis / 2f;
-
-                myManager.particleManager.ActiveBumpParticle(pos);
             }
         }
     }
@@ -483,12 +481,12 @@ public class MoveController : MonoBehaviourPunCallbacks
             // 일정 시간동안 땅에 닿아있어야 점프 가능
             if(currentGroundedTime >= needGroundedTime)
             {
-                if(isRoom)
+                if(isRoom && canJump == false)
                 {
                     canJump = true;
                     myManagerRoom.CanJumpChange(true);
                 }
-                else
+                else if(canJump == false)
                 {
                     canJump = true;
                     myManager.CanJumpChange(true);

@@ -8,13 +8,15 @@ public class UserDataController : MonoBehaviour
 {
     private void Awake()
     {
+        Debug.LogWarning($"Scene : {SceneManager.GetActiveScene().name}");
+
         // 최초 유저데이터 스태틱 메모리 생성
         if(UserData.instance == null)
         {
             UserData UserData = new UserData();
         }
 
-        if (SceneManager.GetActiveScene().ToString().ToLower().Contains("linesmash"))
+        if (SceneManager.GetActiveScene().name.ToLower().Contains("linesmash"))
         {
             Debug.Log("자동 세이브로드 안함 : 메인게임이기때문에");
             return;
