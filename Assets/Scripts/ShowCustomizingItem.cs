@@ -115,9 +115,6 @@ public class ShowCustomizingItem : MonoBehaviour
 
             CustomizingItem customizingItem = Resources.Load("item/"+itemName) as CustomizingItem;
 
-            Debug.Log("Index : " + index);
-            Debug.Log("customizingItem : " + customizingItem);
-
             if (customizingItem != null)
             {
                 GameObject item = customizingItem.object3D;

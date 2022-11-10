@@ -53,12 +53,10 @@ public class SoundController : MonoBehaviourPunCallbacks
     {
         BGMSoundOn();
 
-        if(scene.name == "Lobby")
+        if(UserData.instance != null)
         {
-            //UserData.instance = Resources.Load("Table/UserData") as UserData;
-
             effectAudio.volume = UserData.instance.EffectVolume;
-            BGMAudio.volume = UserData.instance.BGMVolume * 0.75f;
+            BGMAudio.volume = UserData.instance.BGMVolume * 0.75f; // 실제 사운드는 조금 작게. 파일 소리가 큼
         }
     }
 
@@ -72,7 +70,7 @@ public class SoundController : MonoBehaviourPunCallbacks
     public void BGMAudioSetting(Slider slider)
     {
         float value = slider.value;
-        BGMAudio.volume = value *0.75f;
+        BGMAudio.volume = value *0.75f; // 실제 사운드는 조금 작게. 파일 소리가 큼
         UserData.instance.BGMVolume = value;
     }
 
@@ -100,13 +98,13 @@ public class SoundController : MonoBehaviourPunCallbacks
         {
             if (UserData.instance != null)
             {
-                BGMAudio.volume = UserData.instance.BGMVolume;
                 effectAudio.volume = UserData.instance.EffectVolume;
+                BGMAudio.volume = UserData.instance.BGMVolume * 0.75f;
             }
             else
             {
-                BGMAudio.volume = 0.5f;
                 effectAudio.volume = 0.5f;
+                BGMAudio.volume = 0.5f * 0.75f;
             }
 
             BGMAudio.clip = introBGMClip;

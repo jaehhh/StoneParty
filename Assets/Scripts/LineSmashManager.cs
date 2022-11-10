@@ -95,7 +95,7 @@ public class LineSmashManager : MonoBehaviourPunCallbacks
         }
     }
 
-    // 깃발 점령에 성공하면 점령상태 UI 변경하는 메소드  ============================================> 문제발생
+    // 깃발 점령에 성공하면 점령상태 UI 변경하는 메소드
     public void OccupationSuccess(string color) // 매개변수로 점령 성공한 팀의 색상을 받는다
     {
         int sub = (blueCount - orangeCount) / 2; // 블루와 오렌지의 깃발 개수 차이 

@@ -6,6 +6,7 @@ using TMPro;
 
 using Photon.Pun;
 using Photon.Realtime;
+using ExitGames.Client.Photon;
 
 // 인게임 씬의 플레이어를 제어하는 스크립트
 
@@ -20,11 +21,13 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
         get { return mainGameManager; }
     }
 
-    // 내 오브젝트 컴포넌트 참조
+    // 내 오브젝트, 컴포넌트 참조
     [SerializeField]
     private TextMeshProUGUI playerNameTagText;
+    [SerializeField]
+    private Image networkImage;
 
-    // 수치값 내 오브젝트에 메모리로 보유
+    // 세팅값 메모리로 보유
     [SerializeField]
     private MeshRenderer oreMesh;
     [SerializeField]
@@ -182,7 +185,6 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
 
     public void CanJumpChange(bool value)
     {
-        Debug.LogWarning("내 CanJumpChange()");
         string name = PhotonNetwork.LocalPlayer.NickName;
 
         RPCCanJumpChange(value, name);
@@ -193,8 +195,6 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCCanJumpChange(bool value, string name)
     {
-        Debug.LogWarning($"RPCCanJumpChange(). 해당 메소드의 주인 : {name}");
-
         canJump = value;
     }
 
@@ -212,5 +212,28 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
             particleManager = mainGameManager.GetComponent<ParticleManager>();
 
         particleManager.ActiveBumpParticle(pos);
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (!photonView.IsMine) return;
+
+        if (pause)
+        {
+            photonView.RPC("NetworkErrorIcon", RpcTarget.OthersBuffered, true); // pause시 RPC 정상호출 불가
+
+            mainGameManager.Alert(true, "방장의 연결 상태가 좋지 않습니다");
+        }     
+        else
+        {
+            photonView.RPC("NetworkErrorIcon", RpcTarget.OthersBuffered, false);
+
+            mainGameManager.Alert(false, "");
+        }            
+    }
+
+    private void NetworkErrorIcon(bool value)
+    {
+        networkImage.gameObject.SetActive(value);
     }
 }

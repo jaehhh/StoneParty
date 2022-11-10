@@ -18,10 +18,12 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
     [SerializeField]
     private Slider slider;
 
+    // 사전 설정 값
+    private float occupationTime = 5f; // 점령 필요 시간
+
     // 상태 값
     [SerializeField]
     private string flagColor;
-    private float occupationTime = 5f;
     private int enemyCount, alleyCount;
     private bool increasing, decreasing; // 코루틴 동작 여부 판단
     [HideInInspector]
@@ -44,9 +46,7 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
     private void Update()
     {
         if(PhotonNetwork.IsMasterClient)
-        {
-            Occupy();
-        }
+        Occupy();
     }
 
     private void Occupy()
@@ -64,14 +64,13 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
 
         if (canOccupation == false || manager.canOccupation == false)
         {
-            // 점령할 수 없는 상태가 되면 증감 중지
+            // 점령할 수 없는 상태가 되면 증감 중지(게임종료 등)
             if(decreasing == true || increasing == true)
             {
                 photonView.RPC("RPCOccupationCoroutine", RpcTarget.AllBufferedViaServer, false, false);
                 photonView.RPC("RPCOccupationCoroutine", RpcTarget.AllBufferedViaServer, true, false);
 
-                photonView.RPC("RPCSliderValueSet", RpcTarget.AllBufferedViaServer, 0f);
-                photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false);
+                photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false, 0f);
             }
 
             return;
@@ -80,7 +79,7 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         // 깃발에 상대방 있을 때 일단 무조건 슬라이더 표시
         if (enemyCount > 0 && slider.IsActive() == false)
         {
-            photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, true);
+            photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, true, -1f);
         }
 
         // 깃발에 아군이 상대보다 적으면 점령수치 증가
@@ -106,27 +105,35 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    private void RPCOccupationCoroutine(bool increase, bool start)
+    private void RPCOccupationCoroutine(bool increase, bool start) // increase -> 점령수치 상승or하락, start -> 수치변경 시작할 것인지 멈출 것인지
     {
-        if (increase && start)
+        if (increase && start && !increasing)
         {
+            SliderValueSet();
+
             increasing = true;
             StartCoroutine("OccupationIncrease");
         }
-        else if (increase && !start)
+        else if (increase && !start && increasing)
         {
             increasing = false;
-            StopCoroutine("OccupationIncrease");  
+            StopCoroutine("OccupationIncrease");
+
+            SliderValueSet();
         }
-        else if (!increase && start)
+        else if (!increase && start && !decreasing)
         {
+            SliderValueSet();
+
             decreasing = true;
             StartCoroutine("OccupationDecrease");
         }
-        else
+        else if(!increase && !start && decreasing)
         {
             decreasing = false;
             StopCoroutine("OccupationDecrease");
+
+            SliderValueSet();
         }
     }
 
@@ -137,75 +144,131 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
 
         while (slider.value < 1f)
         {
-            slider.value += Time.deltaTime / occupationTime;
+            slider.value += Time.unscaledDeltaTime / occupationTime;
 
             yield return null;
         }
 
         // 점령 완료
 
-        // 적과 아군 수 서로 바꿈
-        int temp = enemyCount;
-        enemyCount = alleyCount;
-        alleyCount = temp;
-
-        increasing = false;
-
-
         if(PhotonNetwork.IsMasterClient)
         {
+            // 적과 아군 수 서로 바꿈
+            int temp = enemyCount;
+            enemyCount = alleyCount;
+            alleyCount = temp;
+            photonView.RPC("CountChange", RpcTarget.OthersBuffered, alleyCount, enemyCount);
+
             // 깃발 색상 변경
             if (flagColor == "blue")
             {
                 flagColor = "orange";
+                photonView.RPC("RPCFlagColor",RpcTarget.OthersBuffered, flagColor);
                 photonView.RPC("RPCFlagColorChange", RpcTarget.AllBufferedViaServer, 1);
             }
             else
             {
                 flagColor = "blue";
+                photonView.RPC("RPCFlagColor", RpcTarget.OthersBuffered, flagColor);
                 photonView.RPC("RPCFlagColorChange", RpcTarget.AllBufferedViaServer, 0);
             }
 
             // 슬라이더 값0 및 비활성화
-            photonView.RPC("RPCSliderValueSet", RpcTarget.AllBufferedViaServer, 0f);
-            photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false);
+            photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false, 0f);
 
             // 잠시동안 재점령 불가능
             canOccupation = false;
+            photonView.RPC("RPCCanOccupation", RpcTarget.AllBuffered, canOccupation);
             photonView.RPC("RPCOccupationCooldownCoroutine", RpcTarget.AllBufferedViaServer);
 
             // 점령 성공 판단 LineSmashManager로 전달. UI와 점령값 등 변경
-            photonView.RPC("RPCOccupationSuccess", RpcTarget.AllBufferedViaServer, flagColor); // ====================> 문제발생
+            photonView.RPC("RPCOccupationSuccess", RpcTarget.AllBufferedViaServer, flagColor);
+
+            photonView.RPC("RPCOccupationCoroutine", RpcTarget.AllBufferedViaServer, true, false); // 수치 상승 멈춤
         }
+
+
     }
 
-    // 점령수치 감소
+    [PunRPC]
+    private void RPCCanOccupation(bool value)
+    {
+        canOccupation = value;
+    }
+
+
+    [PunRPC]
+    private void RPCFlagColor(string color)
+    {
+        flagColor = color;
+    }
+
+    [PunRPC]
+    private void CountChange(int alley, int enemy)
+    {
+        alleyCount = alley;
+        enemyCount = enemy;
+    }
+
+    // 점령수치 감소. 각 클라이언트가 실행
     private IEnumerator OccupationDecrease()
     {
         while (slider.value > 0f)
         {
-            slider.value -= Time.deltaTime / occupationTime;
+            slider.value -= Time.unscaledDeltaTime / occupationTime;
 
             yield return null;
         }
 
-        decreasing = false;
+        if(PhotonNetwork.IsMasterClient)
+        {
+            // 아군에 의해 점령수치 감소 완료
 
-        photonView.RPC("RPCSliderValueSet", RpcTarget.AllBufferedViaServer, 0f);
-        photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false);
+            photonView.RPC("RPCSliderSetActive", RpcTarget.AllBufferedViaServer, false, 0f);
+
+            photonView.RPC("RPCOccupationCoroutine", RpcTarget.AllBufferedViaServer, false, false);
+        }
     }
+
 
     // 슬라이더 온오프
     [PunRPC]
-    private void RPCSliderSetActive(bool value)
+    private void RPCSliderSetActive(bool value, float sliderValue = -1)
     {
+        if (sliderValue >= 0) //백그라운드일때 RPC 호출받아도 value값 변경 가능하도록..
+        {
+            slider.gameObject.SetActive(true);
+            slider.value = sliderValue;
+        }
         slider.gameObject.SetActive(value);
     }
+
+    // 슬라이더 값 조정
+    private void SliderValueSet()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            float value = slider.value;
+            photonView.RPC("RPCSliderValueSet", RpcTarget.AllBuffered, value);
+        }
+    }
+
     // 슬라이더 값 조정
     [PunRPC]
     private void RPCSliderValueSet(float value)
     {
         slider.value = value;
+    }
+
+    [PunRPC]
+    private void RPCIncreasing(bool value)
+    {
+        increasing = value;
+    }
+    [PunRPC]
+    private void RPCDecreasing(bool value)
+    {
+        decreasing = value;
     }
 
     // 점령 성공
@@ -229,6 +292,7 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2f);
 
         canOccupation = true;
+        photonView.RPC("RPCCanOccupation", RpcTarget.AllBuffered, canOccupation);
     }
 
     // 깃발 색상 변경
@@ -247,12 +311,14 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
             (other.gameObject.CompareTag("PlayerOrange") && flagColor == "blue"))
         {
             enemyCount++;
+            photonView.RPC("CountChange", RpcTarget.OthersBuffered, alleyCount, enemyCount);
         }
         // 우리팀이 깃발에 도달했을 때
         else if ((other.gameObject.CompareTag("PlayerBlue") && flagColor == "blue") ||
             (other.gameObject.CompareTag("PlayerOrange") && flagColor == "orange"))
         {
             alleyCount++;
+            photonView.RPC("CountChange", RpcTarget.OthersBuffered, alleyCount, enemyCount);
         }
 
         Debug.LogWarning($"OnTriggerEnter() enemyCount : {enemyCount}, alleyCount : {alleyCount}");
@@ -267,12 +333,14 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         (other.gameObject.CompareTag("PlayerOrange") && flagColor == "blue"))
         {
             enemyCount--;
+            photonView.RPC("CountChange", RpcTarget.OthersBuffered, alleyCount, enemyCount);
         }
         // 우리팀이 깃발을 벗어났을 때
         else if ((other.gameObject.CompareTag("PlayerBlue") && flagColor == "blue") ||
             (other.gameObject.CompareTag("PlayerOrange") && flagColor == "orange"))
         {
             alleyCount--;
+            photonView.RPC("CountChange", RpcTarget.OthersBuffered, alleyCount, enemyCount);
         }
 
         Debug.LogWarning($"OnTriggerExit() enemyCount : {enemyCount}, alleyCount : {alleyCount}");
