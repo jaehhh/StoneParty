@@ -29,14 +29,14 @@ public class TitleController : MonoBehaviour
         if (UserData.instance.PlayerName == "new player" || string.IsNullOrEmpty(UserData.instance.PlayerName))
         {
             newPlayerPanel.SetActive(true);
-            introToon.SetActive(true);
             againPlayerPanel.SetActive(false);
+            introToon.SetActive(true);
         }
         else
         {
-            againPlayerPanel.SetActive(true);
             newPlayerPanel.SetActive(false);
-            introToon.SetActive(false);
+            againPlayerPanel.SetActive(true);
+            introToon.SetActive(true); // 전시용 true
         }
     }
 

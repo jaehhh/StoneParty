@@ -39,7 +39,7 @@ public class IntroToon : MonoBehaviour
 
     private void ImageChange()
     {
-        if(volume < 0)
+        if(volume <= 0)
         {
             if (UserData.instance != null)
                 volume = UserData.instance.EffectVolume;
@@ -60,5 +60,23 @@ public class IntroToon : MonoBehaviour
         }
 
         GetComponentInChildren<Image>().sprite = sprites[index++];
+    }
+
+    public void Skip()
+    {
+        if (volume <= 0)
+        {
+            if (UserData.instance != null)
+                volume = UserData.instance.EffectVolume;
+            else
+                volume = 0.5f;
+
+            myAudio.volume = volume;
+        }
+
+        myAudio.Stop();
+        myAudio.Play();
+
+        transform.parent.gameObject.SetActive(false);
     }
 }

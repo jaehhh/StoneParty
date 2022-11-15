@@ -239,6 +239,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
             else
             {
                 Debug.LogWarning("준비하지 않은 인원 존재 : "+ readyCount +" / " + (PhotonNetwork.CurrentRoom.PlayerCount - 1));
+
+                AlertBarUI.instance.AlertWithText("아직 준비되지 않은 플레이어가 있어요");
             }
         }
         // 방장 아니면 레디/레디헤제

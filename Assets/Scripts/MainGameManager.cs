@@ -313,7 +313,7 @@ public class MainGameManager : MonoBehaviourPunCallbacks
     {
         Debug.LogWarning("다른 플레이어 떠남");
 
-        // 나 혼자 남으면 게임 종료
+        // 나 혼자 남으면 게임 종료. 3인 이상 방 테스트 해볼필요 있음
         if (PhotonNetwork.CurrentRoom.PlayerCount <= 1)
         {
             plusMasage = "모든 플레이어가 나갔습니다. ";

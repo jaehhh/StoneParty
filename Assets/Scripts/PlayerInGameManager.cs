@@ -234,6 +234,6 @@ public class PlayerInGameManager : MonoBehaviourPunCallbacks
 
     private void NetworkErrorIcon(bool value)
     {
-        networkImage.gameObject.SetActive(value);
+        // networkImage.gameObject.SetActive(value);
     }
 }
