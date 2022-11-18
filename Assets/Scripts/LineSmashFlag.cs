@@ -12,7 +12,8 @@ using Photon.Realtime;
 public class LineSmashFlag : MonoBehaviourPunCallbacks
 {
     // 타 오브젝트
-    private LineSmashManager manager;
+    private LineSmashManager lineSmashManager;
+    private MainGameManager mainGameManager;
 
     // 자식 UI
     [SerializeField]
@@ -39,9 +40,13 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
     private float rpcDelay = 0.1f;
     private float currentRpcDelay;
 
+    // 값 창고
+    private ParticleController particleCanOcc;
+
     private void Awake()
     {
-        manager = GameObject.FindObjectOfType<LineSmashManager>().GetComponent<LineSmashManager>();
+        lineSmashManager = GameObject.FindObjectOfType<LineSmashManager>().GetComponent<LineSmashManager>();
+        mainGameManager = GameObject.FindObjectOfType<MainGameManager>().GetComponent<MainGameManager>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -113,7 +118,7 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         float value = slider.value;
         photonView.RPC("RPCSliderValueSet", RpcTarget.AllBuffered, value);
 
-        if (canOccupation == false || manager.canOccupation == false)
+        if (canOccupation == false || lineSmashManager.canOccupation == false)
         {
             // 점령할 수 없는 상태가 되면 증감 중지(게임종료 등)
             if(decreasing == true || increasing == true)
@@ -187,6 +192,14 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         {
             slider.value += Time.deltaTime / occupationTime;
 
+            if (!canOccupation)
+            {
+                slider.value = 0f;
+                slider.gameObject.SetActive(false);
+
+                break;
+            }
+
             yield return null;
         }
 
@@ -218,7 +231,7 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
             // 잠시동안 재점령 불가능
             canOccupation = false;
             photonView.RPC("RPCCanOccupation", RpcTarget.AllBuffered, canOccupation);
-            photonView.RPC("RPCOccupationCooldownCoroutine", RpcTarget.AllBufferedViaServer);
+            photonView.RPC("RPCOccupationCooldownCoroutine", RpcTarget.AllBufferedViaServer); // 몇초후 재점령 불가능 풀림
 
             // 점령 성공 판단 LineSmashManager로 전달. UI와 점령값 등 변경
             photonView.RPC("RPCOccupationSuccess", RpcTarget.AllBufferedViaServer, flagColor);
@@ -233,6 +246,25 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         canOccupation = value;
     }
 
+    public void CanOccChange(bool value)
+    {
+        if(canOccupation && value != canOccupation) // 가능 -> 불가능
+        {
+            mainGameManager.GetComponent<ParticleManager>().DeactiveCanOccParticle(particleCanOcc);
+
+            StopCoroutine("OccupationDecrease");
+            StopCoroutine("OccupationIncrease");
+        }
+        else if(!canOccupation && value != canOccupation) // 불가능 -> 가능
+        {
+            particleCanOcc = mainGameManager.GetComponent<ParticleManager>().ActiveCanOccParticle(this.transform.position);
+        }
+
+        slider.value = 0f;
+        slider.gameObject.SetActive(false);
+
+        canOccupation = value;
+    }
 
     [PunRPC]
     private void RPCFlagColor(string color)
@@ -253,7 +285,15 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         while (slider.value > 0f)
         {
             slider.value -= Time.unscaledDeltaTime / occupationTime;
+            
+            if(!canOccupation)
+            {
+                slider.value = 0f;
+                slider.gameObject.SetActive(false);
 
+                break;
+            }
+            
             yield return null;
         }
 
@@ -302,9 +342,9 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
     [PunRPC]
     private void RPCOccupationSuccess(string color)
     {
-        manager.GetComponent<ParticleManager>().ActiveOccupyParticle(this.transform.position + new Vector3(0, 2.7f, 0));
+        lineSmashManager.GetComponent<ParticleManager>().ActiveOccupyParticle(this.transform.position + new Vector3(0, 2.7f, 0));
 
-        manager.OccupationSuccess(color);   
+        lineSmashManager.OccupationSuccess(color);   
     }
 
     // 점령성공 후 잠시동안 점령불가능
@@ -319,7 +359,6 @@ public class LineSmashFlag : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(2f);
 
         canOccupation = true;
-        photonView.RPC("RPCCanOccupation", RpcTarget.AllBuffered, canOccupation);
     }
 
     // 깃발 색상 변경

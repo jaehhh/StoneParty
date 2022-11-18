@@ -179,6 +179,8 @@ public class MoveController : MonoBehaviourPunCallbacks
         if(fixedVel < 0)
         {
             fixedVel *= -1f;
+
+            rigid.mass = Mathf.Clamp(fixedVel, 1f, 5f);
         }
     }
 

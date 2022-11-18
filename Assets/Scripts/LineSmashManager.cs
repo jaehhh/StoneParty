@@ -39,14 +39,18 @@ public class LineSmashManager : MonoBehaviourPunCallbacks
     {
         OccupationUISetup();
 
-        // 초기 전방에 있는 깃발 점령가능 상태 활성화
-        flags[occupationPoints.Length / 2 - 1].canOccupation = true;
-        flags[occupationPoints.Length / 2].canOccupation = true;
-
         mainGameManager = GetComponent<MainGameManager>();
 
         mainGameManager.spawnPoint = SetSpawnPoint(); // 스폰지점 MainGameManager로 전달
         mainGameManager.gameStateChangeEvent.AddListener(OccupationPossibleState); // 게임시작하면 점령할 수 있도록
+    }
+
+    private void Start()
+    {
+        // 초기 전방에 있는 깃발 점령가능 상태 활성화
+
+        flags[occupationPoints.Length / 2 - 1].CanOccChange(true);
+        flags[occupationPoints.Length / 2].CanOccChange(true);
     }
 
     private Vector3 SetSpawnPoint()
@@ -112,8 +116,8 @@ public class LineSmashManager : MonoBehaviourPunCallbacks
             // 점령 가능 깃발 변경
             if (flagNumber != occupationPoints.Length - 1 && flagNumber != 0)
             {
-                flags[flagNumber - 1].canOccupation = false;
-                flags[flagNumber + 1].canOccupation = true;
+                flags[flagNumber - 1].CanOccChange(false);
+                flags[flagNumber + 1].CanOccChange(true);
             }
         }
         else
@@ -127,8 +131,8 @@ public class LineSmashManager : MonoBehaviourPunCallbacks
             // 점령 가능 깃발 변경
             if (flagNumber != occupationPoints.Length - 1 && flagNumber != 0)
             {
-                flags[flagNumber - 1].canOccupation = true;
-                flags[flagNumber + 1].canOccupation = false;
+                flags[flagNumber - 1].CanOccChange(true);
+                flags[flagNumber + 1].CanOccChange(false);
             }
         }
 
@@ -155,7 +159,7 @@ public class LineSmashManager : MonoBehaviourPunCallbacks
         }
         else if (sub ==0)
         {
-            mainGameManager.winner = null;
+            mainGameManager.winner = "";
         }
 
 

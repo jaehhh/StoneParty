@@ -41,10 +41,14 @@ public class ParticleController : MonoBehaviour
             particles[i].Play();
         }
 
-        audioSource.volume = volume;
-        audioSource.clip = clips[Random.Range(0, clips.Length)];
-        audioSource.Play();
+        if(audioSource != null)
+        {
+            audioSource.volume = volume;
+            audioSource.clip = clips[Random.Range(0, clips.Length)];
+            audioSource.Play();
+        }
 
+        if(deactiveTime > 0) // 0 이하 세팅이면 자동 삭제 X
         StartCoroutine("AutoDeactive");
     }
 

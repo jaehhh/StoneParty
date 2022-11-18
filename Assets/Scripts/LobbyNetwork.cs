@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class LobbyNetwork : MonoBehaviourPunCallbacks
 {
     [SerializeField]
-    private string gameVersion = "1";
+    private string gameVersion = "1.0.1";
 
     // UI 관련
     [SerializeField]

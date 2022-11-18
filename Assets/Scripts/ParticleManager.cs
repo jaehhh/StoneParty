@@ -8,12 +8,16 @@ public class ParticleManager : MonoBehaviour
     [SerializeField] GameObject[] particleDeath;
     [SerializeField] GameObject particleBump;
     [SerializeField] GameObject particleOccupy;
+    [SerializeField] GameObject particleCanOcc;
 
     // ¸Þ¸ð¸®
     private MemoryPool memoryPoolDeathParticleBlue;
     private MemoryPool memoryPoolDeathParticleOrange;
     private MemoryPool memoryPoolBumpParticle;
     private MemoryPool memoryPoolOccupyParticle;
+    private MemoryPool memoryPoolCanOcc;
+
+    private Vector3 temp;
 
     private void Awake()
     {
@@ -21,6 +25,7 @@ public class ParticleManager : MonoBehaviour
         memoryPoolDeathParticleOrange = new MemoryPool(particleDeath[1]);
         memoryPoolBumpParticle = new MemoryPool(particleBump);
         memoryPoolOccupyParticle = new MemoryPool(particleOccupy);
+        memoryPoolCanOcc = new MemoryPool(particleCanOcc);
     }
 
     public void ActiveDeathParticle(int num, Vector3 pos)
@@ -59,5 +64,21 @@ public class ParticleManager : MonoBehaviour
         clone = memoryPoolOccupyParticle.ActivePoolItem();
         clone.transform.position = pos;
         clone.GetComponent<ParticleController>().Setup(memoryPoolOccupyParticle);
+    }
+
+    public ParticleController ActiveCanOccParticle(Vector3 pos)
+    {
+        GameObject clone;
+
+        clone = memoryPoolCanOcc.ActivePoolItem();
+        clone.transform.position = pos;
+        ParticleController value = clone.GetComponent<ParticleController>();
+        value.Setup(memoryPoolCanOcc);
+
+        return value;
+    }
+    public void DeactiveCanOccParticle(ParticleController target)
+    {
+        memoryPoolCanOcc.DeactivePoolItem(target.gameObject);
     }
 }
